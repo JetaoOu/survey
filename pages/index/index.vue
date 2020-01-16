@@ -1,0 +1,256 @@
+<template>
+	<view>
+		<!-- // {
+					// 	"data": [{
+					// 		"changetime": "2019-09-12 19:43:21",
+					// 		"height": 5,
+					// 		"image": "http://localhost:8080/myproject-questionnaire/resource/12/4/12/11/14/11/3/3/601667307548418394c1e3510d98a838.jpg",
+					// 		"introduce": "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦",
+					// 		"isshow": false,
+					// 		"remark": "99999999999999999999999999",
+					// 		"rounterchart": "不显示",
+					// 		"rounterchartid": "512d470138544569937f7705a03338cf",
+					// 		"savetime": "2019-09-12 19:43:21",
+					// 		"url": "www.baidu.com",
+					// 		"width": 5
+					// 	}] -->
+		
+		<view class="banner">
+			<uni-swiper-dot :info="banner" :current="current" mode="nav" :dots-styles="dotsStyles" field="introduce" >
+				<swiper class="swiper-box" autoplay :interval="interval" :duration="duration" @change="change" >
+					<swiper-item v-for="(item,index) in banner" :key="index"  @click="goDetail(item)">
+						<view  class="swiper-item">
+							<image src="https://pic.36krcnd.com/201909/12005324/9gykovdtjyt2fhz8!heading" mode="aspectFill" />
+						</view>
+					</swiper-item>
+				</swiper>
+			</uni-swiper-dot>
+		</view>
+
+
+		<view class="uni-list">
+			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(value, key) in listData" :key="key" @click="goDetail(value)">
+				<view class="uni-media-list">
+					<image class="uni-media-list-logo" :src="value.cover"></image>
+					<view class="uni-media-list-body">
+						<view class="uni-media-list-text-top">{{ value.title }}</view>
+						<view class="uni-media-list-text-bottom">
+							<text>{{ value.author_name }}</text>
+							<text>{{ value.published_at }}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<uni-load-more :status="status" :content-text="contentText" />
+	</view>
+</template>
+
+<script>
+	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue'
+	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
+	var dateUtils = require('@/common/util.js').dateUtils;
+
+	export default {
+		components: {
+			uniSwiperDot,
+			uniLoadMore
+		},
+		data() {
+			return {
+				current: 0,//轮播图index
+				interval: 2000,
+				duration: 500,
+				banner: {
+							"changetime": "2019-09-12 19:43:21",
+							"height": 5,
+							"image": "http://localhost:8080/myproject-questionnaire/resource/12/4/12/11/14/11/3/3/601667307548418394c1e3510d98a838.jpg",
+							"introduce": "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦",
+							"isshow": false,
+							"remark": "99999999999999999999999999",
+							"rounterchart": "不显示",
+							"rounterchartid": "512d470138544569937f7705a03338cf",
+							"savetime": "2019-09-12 19:43:21",
+							"url": "www.baidu.com",
+							"width": 5
+						},//轮播图数据
+				
+				listData: [],
+				last_id: '',
+				reload: false,
+				status: 'more',
+				contentText: {
+					contentdown: '上拉加载更多',
+					contentrefresh: '加载中',
+					contentnomore: '没有更多'
+				},
+				dotsStyles:{
+					backgroundColor: 'rgba(0, 0, 0, .3)',
+					border: '1px rgba(0, 0, 0, .3) solid',
+					color: '#fff',
+					selectedBackgroundColor: 'rgba(0, 0, 0, .9)',
+					selectedBorder: '1px rgba(0, 0, 0, .9) solid'
+				}			
+				
+			};
+		},
+		onLoad() {
+			this.getBanner();
+			this.getList();
+		},
+		onPullDownRefresh() {
+			this.reload = true;
+			this.last_id = '';
+			this.getBanner();
+			this.getList();
+		},
+		onReachBottom() {
+			this.status = 'more';
+			this.getList();
+		},
+		methods: {
+			change(e) {
+				this.current = e.detail.current
+			},
+			getBanner() {
+				let data;
+				// uni.request({
+				// 	url: 'http://img1.imgtn.bdimg.com/it/u=2174909441,2495215020&fm=26&gp=0.jpg',
+				// 	data: data,
+				// 	success: data => {
+				// 		if (data.statusCode == 200) {
+				// 			this.banner = data.data
+				// 		}
+				// 	},
+				// 	fail: (data, code) => {
+				// 		console.log('fail' + JSON.stringify(data));
+				// 	}
+				// })
+			},
+			getList() {
+				var data = {
+					column: 'id,post_id,title,author_name,cover,published_at' //需要的字段名
+				};
+				if (this.last_id) {
+					//说明已有数据，目前处于上拉加载
+					this.status = 'loading';
+					data.minId = this.last_id;
+					data.time = new Date().getTime() + '';
+					data.pageSize = 10;
+				}
+				uni.request({
+					url: 'https://unidemo.dcloud.net.cn/api/news',
+					data: data,
+					success: data => {
+						if (data.statusCode == 200) {
+							let list = this.setTime(data.data);
+							this.listData = this.reload ? list : this.listData.concat(list);
+							this.last_id = list[list.length - 1].id;
+							this.reload = false;
+						}
+					},
+					fail: (data, code) => {
+						console.log('fail' + JSON.stringify(data));
+					}
+				});
+			},
+			goDetail: function(e) {
+				let detail = {
+					author_name: e.author_name,
+					cover: e.cover,
+					id: e.id,
+					post_id: e.post_id,
+					published_at: e.published_at,
+					title: e.introduce
+				};
+				uni.navigateTo({
+					url: '../list2detail-detail/list2detail-detail?detailDate=' + encodeURIComponent(JSON.stringify(detail))
+				});
+			},
+			setTime: function(items) {
+				var newItems = [];
+				items.forEach(e => {
+					newItems.push({
+						author_name: e.author_name,
+						cover: e.cover,
+						id: e.id,
+						post_id: e.post_id,
+						published_at: dateUtils.format(e.published_at),
+						title: e.title
+					});
+				});
+				return newItems;
+			}
+		}
+	};
+</script>
+
+<style >
+	.uni-margin-wrap {
+		width: 690upx;
+		margin: 0 30upx;
+	}
+
+	.swiper {
+		height: 360upx;
+	}
+
+	.swiper-item {
+		position: absolute;
+		width: 100%;
+		height: 10%;
+		text-align: center;
+	}
+
+	.swiper-list {
+		margin-top: 40upx;
+		margin-bottom: 0;
+	}
+
+	.banner {
+		height: 360upx;
+		overflow: hidden;
+		position: relative;
+		background-color: #ccc;
+	}
+
+	.banner-img {
+		width: 100%;
+	}
+
+	.banner-title {
+		max-height: 84upx;
+		overflow: hidden;
+		position: absolute;
+		left: 30upx;
+		bottom: 30upx;
+		width: 90%;
+		font-size: 32upx;
+		font-weight: 400;
+		line-height: 42upx;
+		color: white;
+		z-index: 11;
+	}
+
+	.uni-media-list-logo {
+		width: 180upx;
+		height: 140upx;
+	}
+
+	.uni-media-list-body {
+		height: auto;
+		justify-content: space-around;
+	}
+
+	.uni-media-list-text-top {
+		height: 74upx;
+		font-size: 28upx;
+		overflow: hidden;
+	}
+
+	.uni-media-list-text-bottom {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+</style>

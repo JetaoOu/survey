@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "问卷内容",
+  "usingComponents": {
+    "uni-rate": "/components/uni-rate/uni-rate"
+  }
+}

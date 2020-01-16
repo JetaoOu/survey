@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+    <head>
+        <meta charset="UTF-8" />
+        <script>
+            var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') ||
+                CSS.supports('top: constant(a)'))
+            document.write(
+                '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
+                (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+        </script>
+        <title>View</title>
+        <style>
+            * {
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            input[type="search"i]::-webkit-search-cancel-button {
+                display: none;
+            }
+        </style>
+        <script>
+            var __wxConfig = {"debug":false,"appname":"Survey","entryPagePath":"pages/login/login.html","page":{"pages/login/login.html":{"window":{"navigationBarTitleText":"登陆","usingComponents":{}}},"pages/message/message.html":{"window":{"navigationBarTitleText":"消息","usingComponents":{}}},"pages/questionnaire-detail/questionnaire-detail.html":{"window":{"navigationBarTitleText":"问卷内容","usingComponents":{"uni-rate":"/components/uni-rate/uni-rate"}}},"pages/index/index.html":{"window":{"navigationBarTitleText":"我的问卷","usingComponents":{"uni-swiper-dot":"/components/uni-swiper-dot/uni-swiper-dot","uni-load-more":"/components/uni-load-more/uni-load-more"}}},"pages/personal/personal.html":{"window":{"navigationBarTitleText":"个人中心","usingComponents":{"cmd-nav-bar":"/components/cmd-nav-bar/cmd-nav-bar","cmd-page-body":"/components/cmd-page-body/cmd-page-body","cmd-transition":"/components/cmd-transition/cmd-transition","cmd-cel-item":"/components/cmd-cell-item/cmd-cell-item","cmd-avatar":"/components/cmd-avatar/cmd-avatar"}}},"pages/list2detail-detail/list2detail-detail.html":{"window":{"navigationBarTitleText":"新闻详情","usingComponents":{}}},"pages/user/info/info.html":{"window":{"navigationBarTitleText":"信息设置","usingComponents":{"uni-popup":"/components/uni-popup/uni-popup","mpvue-city-picker":"/components/mpvue-citypicker/mpvueCityPicker","cmd-nav-bar":"/components/cmd-nav-bar/cmd-nav-bar","cmd-page-body":"/components/cmd-page-body/cmd-page-body","cmd-transition":"/components/cmd-transition/cmd-transition","cmd-cel-item":"/components/cmd-cell-item/cmd-cell-item","cmd-avatar":"/components/cmd-avatar/cmd-avatar"}}},"pages/user/modify/modify.html":{"window":{"navigationBarTitleText":"修改密码","usingComponents":{"cmd-nav-bar":"/components/cmd-nav-bar/cmd-nav-bar","cmd-page-body":"/components/cmd-page-body/cmd-page-body","cmd-transition":"/components/cmd-transition/cmd-transition","cmd-input":"/components/cmd-input/cmd-input"}}},"pages/regist/regist.html":{"window":{"navigationBarTitleText":"注册","usingComponents":{}}}},"global":{"window":{"navigationBarTextStyle":"black","navigationBarTitleText":"uni-app","navigationBarBackgroundColor":"#F8F8F8","backgroundColor":"#F8F8F8"}},"tabBar":{"color":"#7A7E83","selectedColor":"#3cc51f","backgroundColor":"#ffffff","borderStyle":"black","list":[{"pagePath":"pages/index/index.html","text":"首页","iconPath":"static/index1.png","selectedIconPath":"static/index.png"},{"pagePath":"pages/message/message.html","text":"消息","iconPath":"static/message1.png","selectedIconPath":"static/message.png"},{"pagePath":"pages/personal/personal.html","text":"个人中心","iconPath":"static/mine1.png","selectedIconPath":"static/mine.png"}],"position":"bottom"},"networkTimeout":{"request":60000,"connectSocket":60000,"uploadFile":60000,"downloadFile":60000},"platform":"devtools","pages":["pages/login/login","pages/message/message","pages/questionnaire-detail/questionnaire-detail","pages/index/index","pages/personal/personal","pages/list2detail-detail/list2detail-detail","pages/user/info/info","pages/user/modify/modify","pages/regist/regist"],"nvueCompiler":"weex","renderer":"auto","splashscreen":{"alwaysShowBeforeRender":true,"autoclose":false},"compilerVersion":"2.3.3","usingComponents":{}}
+        </script>
+        <script>
+            var __id__ = '';
+            window.__dispatchGenerateFunc__ = function(page) {
+                __id__ = page;
+                document.title = page;
+                // window.history.pushState('', '', page);
+                var wxss = page.replace('.html', '.wxss')
+                if (
+                    typeof __wxAppCode__ !== 'undefined' &&
+                    __wxAppCode__.hasOwnProperty(wxss)
+                ) {
+                    var setCssToHead = __wxAppCode__[wxss]
+                    typeof setCssToHead === 'function' && setCssToHead()
+                    document.dispatchEvent(new CustomEvent("generateFuncReady", {
+                        detail: {
+                            generateFunc: $gwx(page.replace('.html', '.wxml'))
+                        }
+                    }));
+                } else {
+                    plus.webview.currentWebview().setJsFile('_www/' + page.replace('.html', '.js'));
+                }
+            };
+        </script>
+        <script src="__uniappes6.js"></script>
+        <script src="uniapp://ready"></script>
+    </head>
+
+    <body>
+        <div></div>
+    </body>
+
+</html>

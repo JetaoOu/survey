@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "问卷内容",
+  "usingComponents": {
+    "uni-card": "/components/uni-card/uni-card",
+    "sunui-star": "/components/sunui-star/sunui-star"
+  }
+}

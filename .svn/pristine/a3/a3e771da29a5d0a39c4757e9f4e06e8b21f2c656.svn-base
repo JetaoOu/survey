@@ -1,0 +1,245 @@
+<template>
+	<view>
+		<page-head :title="title"></page-head>
+		<view class="uni-padding-wrap uni-common-mt">
+			<form @submit="formSubmit" @reset="formReset">
+				<view class="uni-form-item uni-column">
+					<view class="title">姓名</view>
+					<input class="uni-input" name="name" placeholder="请输入姓名" />
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">密码 </view>
+					<input class="uni-input" type="number" name="password" placeholder="请输入密码" />
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">学号 </view>
+					<input class="uni-input" type="number" name="phone" placeholder="请输入学号" />
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">E-mail </view>
+					<input class="uni-input" type="text" name="email" placeholder="请输入邮箱" />
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">手机 </view>
+					<input class="uni-input" type="number" name="studentNumber" placeholder="请输入手机" />
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">性别 </view>
+					<radio-group name="sex">
+						<label>
+							<radio :value="1" /><text>男</text>
+							<radio :value="0" /><text>女</text>
+						</label>
+					</radio-group>
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">毕业年度</view>
+					<view class="uni-list">
+						<view class="uni-list-cell">
+							<view class="uni-list-cell-left">
+								当前选择
+							</view>
+							<view class="uni-list-cell-db">
+								<picker mode="date" fields="year" name="graduationYear" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
+									<view class="uni-input">{{date}}</view>
+								</picker>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">通信地址</view>
+					<view class="uni-list">
+						<view class="uni-list-cell">
+							<view class="uni-list-cell-left">
+								城市
+							</view>
+							<view class="uni-list-cell-db">
+								<view class="uni-input" name="correspondenceAddress" @click="showMulLinkageThreePicker">{{correspondenceAddress}}</view>
+							</view>
+						</view>
+						<view class="uni-list-cell">
+							<view class="uni-list-cell-left">
+								街道
+							</view>
+							<view class="uni-list-cell-db">
+								<input class="uni-input" type="text" name="street" placeholder="详细街道信息" />
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="uni-form-item uni-column">
+					<view class="title">毕业后计划 </view>
+					<radio-group name="graduationPlane" @change="chooseGraduationPlane">
+						<label>
+							<radio :value="0" /><text>求职</text>
+							<radio :value="1" /><text>考研</text>
+							<radio :value="2" /><text>出国</text>
+							<radio :value="3" /><text>其他</text>
+						</label>
+					</radio-group>
+					<view class="" v-if="showGraduationPlane">
+						<view class="title">{{graduationPlaneTitle}} </view>
+						<radio-group name="graduationPlaneSituation" @change="chooseGraduationPlaneSituation">
+							<label>
+								<radio :value="0" /><text>进行中</text>
+								<radio :value="1" /><text>已被录用</text>
+							</label>
+						</radio-group>
+					</view>
+					<view class="" v-if="showOtherGraduationPlane">
+						<view class="title">{{otherGraduationPlaneTitle}} </view>
+						<input class="uni-input" name="otherGraduationPlane" placeholder="其他（请说明，例如：创业中）">
+					</view>
+
+					<view class="uni-list" v-if="showGraduationPlaneSituation">
+						<view class="uni-list-cell">
+							<view class="title">{{graduationPlaneSituationText1}} </view>
+							<input class="uni-input" name="graduationPlaneSituation1" />
+						</view>
+						<view class="uni-list-cell">
+							<view class="title">{{graduationPlaneSituationText2}} </view>
+							<input class="uni-input" name="graduationPlaneSituation2" />
+						</view>
+					</view>
+
+				</view>
+
+				<view class="uni-btn-v">
+					<button formType="submit">提交</button>
+					<button type="default" formType="reset">取消</button>
+				</view>
+			</form>
+		</view>
+		<mpvue-city-picker :themeColor="themeColor" ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault"
+		 @onCancel="onCancel" @onConfirm="onConfirm"></mpvue-city-picker>
+	</view>
+</template>
+<script>
+	// https://github.com/zhetengbiji/mpvue-citypicker
+	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
+	import cityData from '@/common/city.data.js'
+
+	function getDate(type) {
+		const date = new Date();
+
+		let year = date.getFullYear();
+
+		if (type === 'start') {
+			year = year - 60;
+		} else if (type === 'end') {
+			year = year + 2;
+		}
+		return `${year}`;
+	}
+	export default {
+		components: {
+			mpvueCityPicker
+		},
+		data() {
+			return {
+				title: 'form',
+				correspondenceAddress: '',
+				themeColor: '#007AFF',
+				cityPickerValueDefault: [0, 0, 1],
+				graduationPlane: 0,
+				showGraduationPlane: false,
+				showOtherGraduationPlane: false,
+				graduationPlaneTitle: "目前的求职情形为",
+				otherGraduationPlaneTitle: "其他",
+				showGraduationPlaneSituation: false,
+				graduationPlaneSituationText1: "单位名称",
+				graduationPlaneSituationText2: "岗位名称",
+				date: getDate({
+					format: true
+				}),
+				startDate: getDate('start'),
+				endDate: getDate('end'),
+				chosen: ''
+			}
+		},
+		methods: {
+			
+			formSubmit: function(e) {
+				var that = this
+				console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
+				uni.request({
+					url: 'http://' + getApp().globalData.requestUrl + '/user/add.action',
+					data:  e.detail.value,
+					method:"POST",
+					success: (e) => {
+						console.log(e)
+						getApp().globalData.user.icon=getApp().globalData.userInfo.avatarUrl
+						getApp().globalData.user.nickname=getApp().globalData.userInfo.nickName
+						uni.switchTab({
+							url: '../message/message'
+						})
+					},
+					fail: (e) => {
+						console.log(e)
+					}
+				})
+			},
+			formReset: function(e) {
+				uni.switchTab({
+					url:"../message/message"
+				})
+				console.log('清空数据')
+				this.chosen = ''
+			},
+			bindDateChange: function(e) {
+				this.date = e.target.value
+			},
+			showMulLinkageThreePicker() {
+				this.$refs.mpvueCityPicker.show()
+			},
+			onCancel(e) {
+				console.log(e)
+				
+			},
+			onConfirm(e) {
+				this.correspondenceAddress = e.label
+			},
+			chooseGraduationPlane(e) {
+				if (e.detail.value == 3) {
+					this.showGraduationPlane = false
+					this.showOtherGraduationPlane = true
+					this.showGraduationPlaneSituation = false
+
+				} else if (e.detail.value == 2) {
+					this.showGraduationPlane = true
+					this.showOtherGraduationPlane = false
+					this.graduationPlaneTitle = "目前的出国情形为"
+					this.graduationPlaneSituationText1 = "学校名称"
+					this.graduationPlaneSituationText2 = "院系所"
+				} else if (e.detail.value == 1) {
+					this.showGraduationPlane = true
+					this.showOtherGraduationPlane = false
+					this.graduationPlaneTitle = "目前的考研情形为"
+					this.graduationPlaneSituationText1 = "学校名称"
+					this.graduationPlaneSituationText2 = "院系所"
+				} else if (e.detail.value == 0) {
+					this.showGraduationPlane = true
+					this.showOtherGraduationPlane = false
+					this.graduationPlaneTitle = "目前的求职情形为"
+					this.graduationPlaneSituationText1 = "单位名称"
+					this.graduationPlaneSituationText2 = "岗位名称"
+				}
+			},
+			chooseGraduationPlaneSituation(e) {
+				if (e.detail.value == 1) {
+					this.showGraduationPlaneSituation = true
+				} else {
+					this.showGraduationPlaneSituation = false
+				}
+			}
+		},
+	}
+</script>
+
+<style>
+	.uni-form-item .title {
+		padding: 20upx 0;
+	}
+</style>

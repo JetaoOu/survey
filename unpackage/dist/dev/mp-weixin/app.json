@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/message/message",
+    "pages/questionnaire-detail/questionnaire-detail",
+    "pages/index/index",
+    "pages/personal/personal",
+    "pages/list2detail-detail/list2detail-detail",
+    "pages/user/info/info",
+    "pages/user/modify/modify",
+    "pages/regist/regist",
+    "pages/login/forget"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "问卷",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/index1.png",
+        "selectedIconPath": "static/index.png"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "消息",
+        "iconPath": "static/message1.png",
+        "selectedIconPath": "static/message.png"
+      },
+      {
+        "pagePath": "pages/personal/personal",
+        "text": "个人中心",
+        "iconPath": "static/mine1.png",
+        "selectedIconPath": "static/mine.png"
+      }
+    ]
+  },
+  "permission": {},
+  "usingComponents": {}
+}
